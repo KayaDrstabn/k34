@@ -1,0 +1,20 @@
+module.exports = {
+  load: '<a:baytonload:1255606857628651621>',
+  check: '<:baytononay:1254814285318848622>',
+  error: '<:baytonerror:1254814288032432283>',
+  arrow: '<:baytontotal:1254814317220724797>',
+  author: '<:baytonid:1234151226422202368>',
+  member: '<:baytonmember:1234150664410632253>',
+  date: '<a:alev_siyah:1135353809057624080>',
+  progress: '<a:baytononay:1234149879237054486>',
+  info: '<:info:1084897817568489602>',
+  partner: '<:Partner_style:1148258406449287198>',
+  mod: '<:mode:1084895808035495998>',
+  hse: '<a:land_hype:1148246986114478151>',
+  bughunter: '<:RozetBug:1148246987385340026>',
+  bravery: '<:hyper1:1148247831992356924>',
+  brilliance: '<:hyper2:1148248021176438846>',
+  balance: '<a:land_hype:1148248404208652311>',
+  dev: '<:botdev:1148247229472182312>',
+  early: '<:early:1148247231095394396>'
+}

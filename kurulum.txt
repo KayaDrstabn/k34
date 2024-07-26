@@ -1,0 +1,4 @@
+1. config.js dosyasında ne yapıcağınız detaylı bir şekilde anlatılmıştır.
+2. Klasörü açıyoruz ardından src > structures > oAuth.js giriyoruz ve aşşağıda super.login kısmına bot tokenimizi yapıştırıyoruz.
+3. Klasörü açıyoruz ardından src > structures > emojis.js giriyoruz ve emojilerimizi ayarlıyoruz.
+4. Klasörü açıyoruz ardından src > events > client > ready.js giriyoruz ve en aşşağıda client.channels.cache.get kısmına log kanal id giriyoruz.(Botun üyeleri devamlı yenilenmesi için gerekli!)
