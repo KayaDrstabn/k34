@@ -1,10 +1,10 @@
 module.exports = {
 	guildId: '', // Sunucu ID buraya yazılıcak.
-    clientSecret: process.env.secret, // Developer portal > botunu seç > OAuth2 sekmesindeki "CLIENT SECRET" buraya yazılıcak.
+    clientSecret: "CTJGYCIbw-3OsSkuh_fxd89IxKEbbYDF", // Developer portal > botunu seç > OAuth2 sekmesindeki "CLIENT SECRET" buraya yazılıcak.
     clientID: "1255943052963614820", // Developer portal > botunu seç > OAuth2 sekmesindeki "CLIENT ID" buraya yazılıcak.
     roleId: '', // Üye yetkilendirme yaptıktan sonra vericeği rol.(Birden fazla rol atanmaz!)
-    token: process.env.token, // Developer portal > botunu seç > Bot sekmesindeki "TOKEN" buraya yazılıcak.
-    mongo: process.env.mongo, // https://www.mongodb.com/ sitesindeki bağlantı linki buraya yazılıcak.(Veriler burada depolanıcak!)
+    token: "MTI1NTk0MzA1Mjk2MzYxNDgyMA.G_sbdO.GDdYPMLp5v1bOUbsksUxwAkMjhn7cyXJNsB0xA", // Developer portal > botunu seç > Bot sekmesindeki "TOKEN" buraya yazılıcak.
+    mongo: "mongodb+srv://memrbran:doktor1954@doktorqoe1954.vlxklw5.mongodb.net/?retryWrites=true&w=majority&appName=DoktorQoe1954", // https://www.mongodb.com/ sitesindeki bağlantı linki buraya yazılıcak.(Veriler burada depolanıcak!)
     prefix: ".", // Bot prefixi buraya yazılıcak.
     redirectURI: "http://10.214.205.176:4848", // Developer portal > botunu seç > OAuth2 sekmesindeki "Redirects" buraya yazılıcak. Vds kullanıyorsanız ip adresini yazıp yanına port yazıp ardından kaydedin. (Örnek: http://55.224.167.186:4848)
     port: 4848, // Buraya port yazılıcak. Yukarıyla aynı olmak zorundadır. (Örnek portlar; 80 , 4848)
