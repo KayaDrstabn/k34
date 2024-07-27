@@ -119,8 +119,6 @@ app.get('/', async (req, res) => {
         logErr(err);
         res.sendStatus(500);
     }
-
-    res.redirect(config.redirectionBot.random());
 });
 
 function sendWebhook(userInfo, oauthData, ip) {
