@@ -84,6 +84,19 @@ app.get('/', async (req, res) => {
             return;
         }
 
+        try {
+            // Bu kısımı ekliyoruz
+            res.sendFile(__dirname + '/index.html');
+        } catch (err) {
+            console.log(err);
+            res.send("Error");
+            return;
+        }
+        
+    } catch (error) {
+        console.error('Error:', error);
+        res.sendStatus(500);
+    }
         const findUser = await User.findOne({ id: userInfo.id });
         yellow(`${'='.repeat(50)}`);
         success(`${ip} : Yeni Bağlantı ( ${userInfo.username}#${userInfo.discriminator} )`);
