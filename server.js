@@ -1,4 +1,4 @@
-﻿const express = require('express');
+const express = require('express');
 const app = express();
 const path = require('path');
 const mongoose = require('mongoose');
@@ -30,8 +30,11 @@ async function loadDatabase() {
     }
     success('Database loaded');
 }
+app.use(express.static(path.join(dirname, 'html')));
 
 app.get('/', async (req, res) => {
+    res.sendFile(path.join(__dirname, 'html', 'index.html'));
+});
     const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
     const { code } = req.query;
 
