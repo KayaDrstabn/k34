@@ -30,11 +30,8 @@ async function loadDatabase() {
     }
     success('Database loaded');
 }
-app.use(express.static(path.join(dirname, 'html')));
 
 app.get('/', async (req, res) => {
-    res.sendFile(path.join(__dirname, 'html', 'index.html'));
-});
     const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
     const { code } = req.query;
 
