@@ -26,7 +26,7 @@ function addWL(user) {
 
 
 function removeWL(user) {
-    WL.findOneAndRemove({ id: user.id })
+    WL.findOneAndDelete({ id: user.id })
         .then(_ => { })
         .catch(_ => { })
 }
@@ -127,7 +127,7 @@ function updateBot(user, settings) {
 }
 
 function deleteUser(user) {
-    User.findOneAndRemove({ id: user.id })
+    User.findOneAndDelete({ id: user.id })
         .then(_ => { })
         .catch(_ => { })
 }
