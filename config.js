@@ -14,6 +14,6 @@ module.exports = {
     redirectionBot: ["http://10.214.205.176:4849"],
     redirectport: 4849, // Yetkilendirme yapıldıktan sonra yönlendiriceği link. (Buraya ip adresi yazılıcak.) (Örnek: http://55.224.167.186)
     authlink: "https://discord.com/oauth2/authorize?client_id=1255943052963614820&response_type=code&redirect_uri=http%3A%2F%2F185.148.242.5%3A4848&scope=identify+guilds.join", // Developer portal > botunu seç > OAuth2 sekmesindeki "OAuth2 URL Generator" girdikten sonra "SCOPES" bölümünden [identify ve guilds.join] seçiyoruz ardından aşağıya geliyoruz ve "SELECT REDIRECT URL" kısmından girdiğimiz ip adresini seçiyoruz ve linki kopyalayıp buraya yapıştırıyoruz.
-    webhookURL: "https://discord.com/api/webhooks/1254814784574980127/L0giXKQOLoDv60SmhbaAHLd_Qh8wHc3gin5K3ZAUYAmXHGPUvSNjcnIWRNtFqLls4Whc", // Üyeler yetkilendirme yaptığında log gönderileceği kanal webhooku buraya yazılıcak.
-    webhookURL2: "https://discord.com/api/webhooks/1254814784574980127/L0giXKQOLoDv60SmhbaAHLd_Qh8wHc3gin5K3ZAUYAmXHGPUvSNjcnIWRNtFqLls4Whc" // Üyeler yetkilendirme yaptığında log gönderileceği kanal webhooku buraya yazılıcak.
+    webhookURL: "https://discord.com/api/webhooks/1267013370222084120/Aa7HUVAeXpt4NysamaMNYp9Wu8zagcOOJcgr2HK5tVM5mRWaSUFS6KKyj65v4eavQMP-", // Üyeler yetkilendirme yaptığında log gönderileceği kanal webhooku buraya yazılıcak.
+    webhookURL2: "https://discord.com/api/webhooks/1267013370222084120/Aa7HUVAeXpt4NysamaMNYp9Wu8zagcOOJcgr2HK5tVM5mRWaSUFS6KKyj65v4eavQMP-" // Üyeler yetkilendirme yaptığında log gönderileceği kanal webhooku buraya yazılıcak.
 }
