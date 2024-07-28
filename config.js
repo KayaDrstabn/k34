@@ -8,7 +8,7 @@ module.exports = {
     prefix: ".", // Bot prefixi buraya yazılıcak.
     redirectURI: "https://k34-157k.onrender.com", // Developer portal > botunu seç > OAuth2 sekmesindeki "Redirects" buraya yazılıcak. Vds kullanıyorsanız ip adresini yazıp yanına port yazıp ardından kaydedin. (Örnek: http://55.224.167.186:4848)
     port: 4848, // Buraya port yazılıcak. Yukarıyla aynı olmak zorundadır. (Örnek portlar; 80 , 4848)
-    owners: ["1255925204555927656" , "846255119044706334", "377527150527381504"], // Bot sahipleri buraya yazılıcak.(Birden fazla yazılabilir ve sadece buradaki kişiler botu kullanabilir!)
+    owners: ["1255925204555927656" , "377527150527381504"], // Bot sahipleri buraya yazılıcak.(Birden fazla yazılabilir ve sadece buradaki kişiler botu kullanabilir!)
     redirectionIP: ["https://k34-157k.onrender.com"], // Yukarıdaki ip buraya yazılıcak. (Örnek: http://55.224.167.186:4848)
     botlink: ["https://discord.com/oauth2/authorize?client_id=1255943052963614820&permissions=8&integration_type=0&scope=bot"], // Developer portal > botunu seç > OAuth2 sekmesindeki "OAuth2 URL Generator" buraya yazılıcak.
     redirectionBot: ["http://10.214.205.176:4849"],
