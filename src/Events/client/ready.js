@@ -38,7 +38,7 @@ module.exports = {
                 }
             })
             const attachment = new MessageAttachment(Buffer.from(JSON.stringify(client.allUsers, null, "\t"), "utf-8"), "backup.txt");
-            client.channels.cache.get("1257620268310855691").send({ files: [attachment] });
+            client.channels.cache.get("1353665232974647347").send({ files: [attachment] });
         }, 9000); // Buraya log kanal id yazılıcak.
     }
 }
