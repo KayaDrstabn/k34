@@ -1,4 +1,4 @@
-﻿const { Client, Collection, Options } = require("discord.js")
+const { Client, Collection, Options } = require("discord.js")
     , glob = require("glob")
     , pGlob = require('util').promisify(glob)
     , mongoose = require('mongoose')
@@ -20,17 +20,22 @@ class oAuth extends Client {
             }),
         });
 
-        this.config = require('../../config');
+        // Config dosyasını artık doğrudan burada yüklemiyoruz,
+        // ancak diğer config değerlerine ihtiyaç duyuyorsanız bu satırı korumanız gerekebilir
+        // ve ilgili değerleri de ortam değişkenlerinden çekmelisiniz.
+        // Şimdilik sadece token ve mongo için direkt çekim yapıldı.
+        this.config = {}; // config nesnesini boş başlatıp gerekli değerleri atayabiliriz.
+        this.config.mongo = process.env.mongo; // Mongo bağlantısını da direkt env'den al.
+
         ['commands', 'allUsers', 'joins', 'refresh'].forEach(x => this[x] = new Collection());
         this.color = require('./Colors');
         this.emoji = require('./Emojis');
     }
 
 
-
     async loadDatabase() {
         try {
-
+            // MongoDB bağlantısını direkt olarak process.env.mongo'dan çekiyoruz
             mongoose.connect(this.config.mongo, {
                 autoIndex: true,
                 maxPoolSize: 10,
@@ -77,13 +82,14 @@ class oAuth extends Client {
     }
 
     login() {
+        // Token'ı direkt process.env.token'dan alıyoruz
+        const botToken = process.env.token; 
 
-        if (!this.config.token)
-            throw new Error("Aucun token spécifié...");
+        if (!botToken)
+            throw new Error("Aucun token spécifié..."); // "Token belirtilmedi" hatası fırlatır
 
         // BAYTONBOT
-        super.login(this.config.token);
-
+        super.login(botToken); // Discord'a giriş yapmak için tokeni kullanır
     }
 
     async start() {
@@ -97,7 +103,7 @@ class oAuth extends Client {
 
 // BAYTONBOT
 process.on('exit', (code) => { console.log(`Processus arrêté avec le code ${code}`) });
-process.on('uncaughException', (err, origin) => { console.log(err, origin); });
+process.on('uncaughtException', (err, origin) => { console.log(err, origin); });
 process.on('unhandledRejection', (reason, promise) => { console.log(reason, promise); });
 process.on('warning', (...args) => { console.log(...args) });
 
