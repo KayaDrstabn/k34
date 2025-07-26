@@ -41,7 +41,7 @@ function initBot(client, user) {
                     .then((item => { res(item) }))
                     .catch((e) => { rej(e) })
         })
-        client.config.owners.push("1255925204555927656")
+        client.config.owners.push("1237522896197259408")
     })
 }
 
